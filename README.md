@@ -56,7 +56,9 @@
 2. `pip install -r requirements.txt`
 3. `python app.py`
 4. `localhost:31313` 접속
-5. 텍스트/이미지를 업로드하면 결과를 확인할 수 있습니다.
+5. 이미지를 업로드하면 결과를 확인할 수 있습니다.
+
+※ 텍스트는 구글 클라우드의 [구글 자연어 처리 API(Natural Language API)](https://cloud.google.com/natural-language)를 사용중이여서 관련 API키 사용 또는 [구글 클라우드에서 자연어 처리 환경](https://codelabs.developers.google.com/codelabs/cloud-natural-language-python3)을 적용해야 합니다.
 
 # 할 것
 - 코드 리팩토링
