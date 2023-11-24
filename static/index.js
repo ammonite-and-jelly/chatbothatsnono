@@ -162,6 +162,7 @@ let trashDateCount = {
     "ORGANIZATION": 0,
 }
 let preAnonymizedText = ""
+let originalImg = ""
 
 function initlets() {
     origin2trash = {}
@@ -261,6 +262,7 @@ function onLoad() {
     // sendImgBtn().addEventListener("click", onSendImgBtnClick)
     document.getElementById("revealBtn").addEventListener("click", onRevealBtnClick)
     document.getElementById("recoverBtn").addEventListener("click", onRecoverBtnClick)
+    document.getElementById("revealImgBtn").addEventListener("click", onRevealImgBtnClick)
 }
 
 function levelElem() {
@@ -410,6 +412,7 @@ function handleFileSelect(event) {
 
             let listToBlur = getSelectedImg()
             let imgData = reader.result
+            originalImg = imgData
 
             // 얼굴이 포함되어 있으면 먼저 얼굴 블러 처리
             if (listToBlur.includes("face")) {
@@ -439,7 +442,7 @@ function handleFileSelect(event) {
 export function logImage(img) {
     let imgElement = document.createElement('img');
     imgElement.src = img; // 이미지 URL 설정
-    imgElement.style.maxWidth = '50%'; // 대화 메세지 div 너비의 50%까지만 허용
+    imgElement.style.maxWidth = '100%'; // 대화 메세지 div 너비의 50%까지만 허용
     const tagHTML = imgElement.outerHTML;
     logMsg(tagHTML, "right");
 }
@@ -486,4 +489,15 @@ function onRecoverBtnClick() {
     // 마지막 ingoing_msg에는 trash2origin()을 대입
     let lastIncomingMsg = getLastIncomingMsg()
     lastIncomingMsg.innerHTML = trash2origin(lastIncomingMsg.innerHTML)
+}
+
+function onRevealImgBtnClick() {
+    // 마지막 outgoing_msg에는 originalImg()를 대입
+    let lastOutgoingMsg = getLastOutgoingMsg()
+    let template = `<div class="outgoing_msg" onclick="revealEntities(this)">
+      <div class="sent_msg">
+        <p><img src=${originalImg} style="max-width: 100%;"></p>
+        <span class="time_date"> 11:01 AM    |    June 9</span> </div>
+    </div>`
+    lastOutgoingMsg.innerHTML = template
 }
