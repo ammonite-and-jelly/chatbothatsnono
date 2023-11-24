@@ -69,6 +69,16 @@ async function blur_objs(img, format, objs) {
     return response['blurred-img']
 }
 
+// fecth로 /captionize_img 호출 (POST)
+// img는 base64 인코딩된 이미지 (헤더 포함)
+async function captionize_img(img) {
+    let data = {
+        "img": img,
+    }
+    const response = await _fetch("captionize_img", data)
+    return response['caption']
+}
+
 
 // async function _fetch(task, data) {
 //     // let url = `${URL}/${task}`
@@ -155,6 +165,8 @@ function setSendBtnDisable(toggle) {
 위치 ->
 
  */
+
+// 원본 객체와 익명화된 객체 매핑
 let origin2trash = {}
 let trashDateCount = {
     "LOCATION": 0,
@@ -273,7 +285,10 @@ async function onSendBtnClick() {
     let value = text()
     let textValue = value.value
 
+    // 객체명(이름, 위치, 조직) 인식
     let entities = await analyze_entities(textValue)
+
+    // 객체 배경색 바꾸기
     let highlightenText = highlightEntities(textValue, entities, getSelectedText())
     // console.log('highlightenText: ', highlightenText)
     text().innerHTML = highlightenText
@@ -282,6 +297,8 @@ async function onSendBtnClick() {
 
     // 익명화
     console.log('textValue: ', textValue)
+
+    // 익명화 전 문장 저장
     let anonymizedText = anonymizeEntities(textValue, getSelectedText(), entities)
     console.log("anonymizedText", anonymizedText)
 
@@ -430,6 +447,13 @@ function handleFileSelect(event) {
 
             // 이미지 로그
             logImage(imgData, "right");
+
+            // 이미지 캡셔나이징
+            let caption = await captionize_img(imgData)
+            console.log("caption: ", caption)
+
+            // 챗봇의 이미지 설명 로그
+            logMsg(caption, "left")
         }
 
         reader.onloadend = onImgLoad

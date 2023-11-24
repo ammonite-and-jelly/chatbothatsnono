@@ -6,6 +6,7 @@ import val
 from thatsnono.filters.image.blur import raw_to_base64, blur
 from thatsnono.filters.image.face_detection import face_locs
 from thatsnono.filters.image.object_detection import detect_objs, filter_objs
+from thatsnono.filters.image.openai import captionize_img
 from thatsnono.filters.text.ner import analyze_entities, extract_entities
 from thatsnono.openai_chat import chat
 
@@ -92,6 +93,19 @@ def on_blur_objs():
     response = {"blurred-img": result}
     return jsonify(response), 200
 
+@app.route('/captionize_img', methods=['POST'])
+def on_captionize_img():
+    """
+    이미지 텍스트 캡션 만들기
+    """
+    data = request.get_json()
+    img = data['img']
+
+    print(f"img: {img[:50]}")
+
+    # 이미지 캡셔나이징
+    response = {"caption": captionize_img(img)}
+    return jsonify(response), 200
 
 def setup():
     # 구글 API 키 설정
